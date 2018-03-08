@@ -1,13 +1,25 @@
 {
-  "name": "ae-backend-xml-nodejs-snippets",
+  "name": "nodejs-simple-web-crawler",
   "version": "1.0.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://bitbucket.org/agileengine/ae-backend-xml-nodejs-snippets.git"
-  },
-  "homepage": "https://bitbucket.org/agileengine/ae-backend-xml-nodejs-snippets#readme",
   "dependencies": {
     "bunyan": "^1.8.12",
+    "cheerio": "^1.0.0-rc.2",
     "jsdom": "^11.6.2"
-  }
+  },
+  "description": "A simple web crawler that locates a user-selected element on a web site with changing information",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Aleksey Lysenko",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-lysenko/nodejs-simple-web-crawler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/a-lysenko/nodejs-simple-web-crawler/issues"
+  },
+  "homepage": "https://github.com/a-lysenko/nodejs-simple-web-crawler#readme"
 }
