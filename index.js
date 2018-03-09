@@ -2,44 +2,55 @@ const bunyan = require('bunyan');
 const fs = require('fs');
 const { JSDOM } = require('jsdom');
 
-const cssQuery = 'div[id="success"] button[class*="btn-primary"]';
-
 const logger = bunyan.createLogger({ name: "myapp" });
 
-const basicElemId = 'a[id="make-everything-ok-button"]';
-
 const xpath = require('./services/xpath.service');
+const crowlerService = require('./services/crowler.service');
 
-let button;
+const DEFAULT_ELEM_ID = 'make-everything-ok-button';
+
+const {_: [originFilePath, subjectFilePath], id: elemId} = require('minimist')(process.argv.slice(2));
+
+let wrongParams = false;
+
+if (!originFilePath || !fs.existsSync(originFilePath)) {
+    logger.error('Path to origin file is not given or file doesn\'t exist');
+    wrongParams = true;
+}
+
+if (!subjectFilePath || !fs.existsSync(subjectFilePath)) {
+    logger.error('Path to subject file is not given or file doesn\'t exist');
+    wrongParams = true;
+}
+
+if (wrongParams) {
+    process.exit(1);
+}
+
+let targetElement;
 
 try {
-    const sampleFile = fs.readFileSync('./pages/origin/sample-0-origin.html');
+    const sampleFile = fs.readFileSync(originFilePath);
     const dom = new JSDOM(sampleFile);
 
-    button = dom.window.document.querySelector(basicElemId);
-    logger.info(`#########: ${xpath("button")}`);
+    targetElement = dom.window.document.querySelector(`#${elemId || DEFAULT_ELEM_ID}`);
 
-    logger.info(`Successfully found element. Element Text: ${button.textContent.trim()}`);
-    logger.info(`Successfully found element. Parent: ${button.parentElement}`);
-    logger.info(`Successfully found element. xpath(button): ${xpath(button)}`);
-    logger.info(`Successfully found element. xpath(button.parentElement): ${xpath(button.parentElement)}`);
+    if (targetElement) {
+        logger.info(`Successfully found element. Element Text: ${targetElement.textContent.trim()}`);
+    }
 
-    const array = Array.prototype.slice.apply(button.attributes);
+    const array = Array.prototype.slice.apply(targetElement.attributes);
     logger.info(array.map(attr => `${attr.name} = ${attr.value}`).join(', '));
 } catch (err) {
     logger.error('Error trying to find element by css selector', err);
 }
 
-const crowlerService = require('./services/crowler.service'); // mock
-const sampleData = crowlerService.retrieveSampleData(button); // no need to pass dom until distance is not analyzed
+const sampleData = crowlerService.retrieveSampleData(targetElement); // no need to pass dom until distance is not analyzed
 
 const relevanceMapService = require('./services/relevanceMap.service');
 const relevanceMap = relevanceMapService.getMap();
 
-const subjectFile = fs.readFileSync('./pages/other/sample-4-the-mash.html');
-// const subjectFile = fs.readFileSync('./pages/other/sample-3-the-escape.html');
-// const subjectFile = fs.readFileSync('./pages/other/sample-2-container-and-clone.html');
-// const subjectFile = fs.readFileSync('./pages/other/sample-1-evil-gemini.html');
+const subjectFile = fs.readFileSync(subjectFilePath);
 const subjectDom = new JSDOM(subjectFile);
 
 const targetItems = crowlerService.getTargetItems(subjectDom, sampleData, relevanceMap);

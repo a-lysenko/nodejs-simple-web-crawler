@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "dependencies": {
     "bunyan": "^1.8.12",
-    "cheerio": "^1.0.0-rc.2",
-    "jsdom": "^11.6.2"
+    "jsdom": "^11.6.2",
+    "minimist": "^1.2.0"
   },
   "description": "A simple web crawler that locates a user-selected element on a web site with changing information",
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "start": "node index.js"
+    "crowl-1": "node index.js ./pages/origin/sample-0-origin.html ./pages/other/sample-1-evil-gemini.html",
+    "crowl-1:id": "node index.js ./pages/origin/sample-0-origin.html ./pages/other/sample-1-evil-gemini.html --id=make-everything-ok-button",
+    "crowl-2": "node index.js ./pages/origin/sample-0-origin.html ./pages/other/sample-2-container-and-clone.html",
+    "crowl-3": "node index.js ./pages/origin/sample-0-origin.html ./pages/other/sample-3-the-escape.html",
+    "crowl-4": "node index.js ./pages/origin/sample-0-origin.html ./pages/other/sample-4-the-mash.html"
   },
   "author": "Aleksey Lysenko",
   "license": "ISC",
