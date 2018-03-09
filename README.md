@@ -30,4 +30,5 @@ or use predefined commands to work with files from "pages" directory:
 - _npm run crowl-3_
 - _npm run crowl-4_
 
-If element is found in changed file you will have its xpath in console message.
+If the element is found in a changed file you will have its xpath in a console message.
+In case more that one element fits with the same level of relevance you will be notified about all of them.
